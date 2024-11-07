@@ -6,26 +6,22 @@ public class ThirdLW {
     public static void main(String[] args) {
         //задаем открытый текст и преобразуем строку в массив байтов
         String message = "Штирлиц – Вы Герой!!";
+        System.out.println("Открытый текст: " + message);
         byte[] plaintext = message.getBytes();
 
         //генерируем ключ, такой же длины как и сообщение
         byte[] key = generateKey(plaintext.length);
+        System.out.println("Ключ (hex): " + bytesToHex(key));
 
         //шифруем сообщение
         byte[] ciphertext = encrypt(plaintext, key);
+        System.out.println("Шифротекст (hex): " + bytesToHex(ciphertext));
 
         //дешифруем сообщение
         byte[] decryptedText = decrypt(ciphertext, key);
-
         //преобразовываем массив байтов в строку
         String decryptedMessage = new String(decryptedText);
-
-
-        System.out.println("Открытый текст: " + message);
-        System.out.println("Ключ (hex): " + bytesToHex(key));
-        System.out.println("Шифротекст (hex): " + bytesToHex(ciphertext));
         System.out.println("Расшифрованный текст: " + decryptedMessage);
-
     }
 
     //метод шифрования принимает на вход массив байтов и ключ в виде массива
@@ -60,14 +56,11 @@ public class ThirdLW {
     }
 
     //вспомогательная функция для преобразования массива байтов в строку, содержащую шестнадцатеричное представление байтов.
-    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+    static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
         }
-        return new String(hexChars);
+        return sb.toString();
     }
 }
