@@ -1,26 +1,34 @@
-import java.util.Arrays;
+//Общий алгоритм программы
+//1.Создается сообщение и преобразовывается в массив байт
+//2.Генерируется ключ, длина которого совпадает с длиной сообщения.
+//  Он также является массивом байт, который генерируется случайным образом
+//3.Сообщение шифруется путем попарного выполнения операции XOR с каждым байтом сообщения и каждым байтом ключа
+//4.Сообщение дешифруется путем повторного выполнения операции XOR, тем самым оно приводится к первоначальному виду
+
+
 import java.util.Random;
 
 public class ThirdLW {
 
     public static void main(String[] args) {
         //задаем открытый текст и преобразуем строку в массив байтов
-        String message = "Штирлиц – Вы Герой!!";
+        String message = "Штирлиц подумал. Ему понравилось, и он подумал еще раз";
         System.out.println("Открытый текст: " + message);
         byte[] plaintext = message.getBytes();
 
         //генерируем ключ, такой же длины как и сообщение
         byte[] key = generateKey(plaintext.length);
-        System.out.println("Ключ (hex): " + bytesToHex(key));
+        System.out.println("Ключ: " + bytesToHex(key));
 
         //шифруем сообщение
         byte[] ciphertext = encrypt(plaintext, key);
-        System.out.println("Шифротекст (hex): " + bytesToHex(ciphertext));
+        System.out.println("Зашифрованный текст: " + bytesToHex(ciphertext));
 
         //дешифруем сообщение
         byte[] decryptedText = decrypt(ciphertext, key);
         //преобразовываем массив байтов в строку
         String decryptedMessage = new String(decryptedText);
+        System.out.println("\nПрименяем метод шифрования повторно");
         System.out.println("Расшифрованный текст: " + decryptedMessage);
     }
 
@@ -57,9 +65,14 @@ public class ThirdLW {
 
     //вспомогательная функция для преобразования массива байтов в строку, содержащую шестнадцатеричное представление байтов.
     static String bytesToHex(byte[] bytes) {
+        //используем класс StringBuilder для более эффективной работы со строками, чтобы каждый раз не создавать новый объект строки
         StringBuilder sb = new StringBuilder();
+        //перебираем каждый байт в цикле формата for-each
         for (byte b : bytes) {
-            sb.append(String.format("%02x", b));
+            //преобразуем байт в шестнадцатиричную строку (X), где минимальная длина равняется двум (02)
+            //если длина символа равняется одному, то слева добавляется нуль
+            //конкатинируем получившуюся строку к общей строке
+            sb.append(String.format("%02X", b));
         }
         return sb.toString();
     }
